@@ -10,9 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2021_11_28_071438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "clients", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "quote_requests", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.integer "budget"
+    t.string "service"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "client_id"
+    t.index ["client_id"], name: "index_quote_requests_on_client_id"
+  end
+
+  create_table "quotes", force: :cascade do |t|
+    t.float "price"
+    t.text "comment"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "quote_request_id"
+    t.index ["quote_request_id"], name: "index_quotes_on_quote_request_id"
+  end
+
+  add_foreign_key "quote_requests", "clients"
+  add_foreign_key "quotes", "quote_requests"
 end
